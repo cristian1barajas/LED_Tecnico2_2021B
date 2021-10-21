@@ -1,28 +1,31 @@
 #include <Arduino.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <BlynkSimpleEsp32.h>
 
-#define LEDPIN 12
-#define BUTTONPIN 33
+char auth[] = "93MWejLZ7INRgCVHD2RpMQ7JlW_qpm6f";
+char ssid[] = "CHRISTIAN 2.4G-5G_ETB";
+char pass[] = "BotLAB2018*";
 
-int stateButton;
-int lastStateButton = 1;
-int stateLed = 0;
-
-void setup(){
-  Serial.begin(9600);
-  pinMode(LEDPIN, OUTPUT);
-  pinMode(BUTTONPIN, INPUT);
-  digitalWrite(LEDPIN, LOW);
+BLYNK_WRITE(V0)
+{
+  int pinValue = param.asInt(); 
+  Serial.println("V0: " + String(pinValue));
 }
 
-void loop(){
-  stateButton = digitalRead(BUTTONPIN);
-  if (stateButton == 0 && lastStateButton == 1) {
-    delay(50);
-    stateButton = digitalRead(BUTTONPIN);
-    if (stateButton == 0 && lastStateButton == 1) {
-      stateLed = !stateLed;
-      digitalWrite(LEDPIN, stateLed);
-    }
-  }
-  lastStateButton = stateButton;
+BLYNK_WRITE(V1)
+{
+  int pinValue = param.asInt(); 
+  Serial.println("V1: " + String(pinValue));
+}
+
+void setup()
+{
+  Serial.begin(9600);
+  Blynk.begin(auth, ssid, pass);
+}
+
+void loop()
+{
+  Blynk.run();
 }
